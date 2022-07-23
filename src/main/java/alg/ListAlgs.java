@@ -7,14 +7,19 @@ import entity.ListNode;
 public class ListAlgs {
     public static void main(String[] args) {
         ListNode head1 = CommonPrint.generateList(5);
-        ListNode head2 = CommonPrint.generateList(5);
-        ListNode head = mergeTwoLists(head1, head2);
-        CommonPrint.printList(head);
+        ListNode end = head1;
+        while(end.next != null){
+            end = end.next;
+        }
+
+        CommonPrint.printList(mergeSort(head1, end));
 
     }
 
     /**
-     * 反转单连表
+     * 反转单链表
+     * 相关例题：
+     * 234. 回文链表
      * @param head 表头（有数据）
      * @return 单链表表头（没数据）
      */
@@ -38,6 +43,9 @@ public class ListAlgs {
 
     /**
      * 合并两个有序链表
+     * 相关例题：
+     * 23. 合并K个升序链表 hard
+     * 148. 排序链表 medium
      * @param l1
      * @param l2
      * @return 合并后的链表头（无数据）
@@ -66,5 +74,32 @@ public class ListAlgs {
             worker1.next = p2;
         }
         return rst;
+    }
+
+    /**
+     * 单链表归并排序
+     * @param start 排序起始节点
+     * @param end   排序结束节点
+     * @return
+     */
+    public static ListNode mergeSort(ListNode start, ListNode end){
+        if(start == end){
+            start.next = null;  // 每个节点都断开
+            return start;
+        }
+        ListNode fast = start;
+        ListNode slow = start;
+        while (fast != end){
+            fast = fast.next;
+            if(fast != end){
+                fast = fast.next;
+                slow = slow.next;
+            }
+        }
+        ListNode mid = slow;
+        ListNode midNext = mid.next;
+        ListNode list1 = mergeSort(start, mid);
+        ListNode list2 = mergeSort(midNext, end);
+        return mergeTwoLists(list1, list2).next;
     }
 }
